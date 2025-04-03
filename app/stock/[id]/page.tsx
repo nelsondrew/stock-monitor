@@ -2,14 +2,6 @@ import { StockResponse, NewsItem } from '@/types/stock';
 import styles from './page.module.css';
 import Link from 'next/link';
 
-// Add proper typing for page props
-interface PageProps {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
 async function getStockNews(companyName: string): Promise<NewsItem[]> {
   try {
     const url = `https://www.google.com/search?q=${encodeURIComponent(companyName + ' share news')}&tbm=nws`;
@@ -80,7 +72,11 @@ async function getStockDetails(id: string) {
   return data.categoryResponseMap.TOP_GAINERS.items.find(stock => stock.gsin === id);
 }
 
-export default async function StockInfo({ params, searchParams }: PageProps) {
+export default async function StockInfo({
+  params,
+}: {
+  params: { id: string }
+}) {
   const stock = await getStockDetails(params.id);
 
   if (!stock) {
