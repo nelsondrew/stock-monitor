@@ -1,0 +1,10 @@
+{
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "environmentVariables": [
+    "GOOGLE_API_KEY",
+    "GOOGLE_SEARCH_ENGINE_ID"
+  ]
+} 
