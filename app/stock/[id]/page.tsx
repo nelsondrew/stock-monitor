@@ -2,6 +2,11 @@ import { StockResponse, NewsItem } from '@/types/stock';
 import styles from './page.module.css';
 import Link from 'next/link';
 
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | undefined };
+};
+
 async function getStockNews(companyName: string): Promise<NewsItem[]> {
   try {
     const url = `https://www.google.com/search?q=${encodeURIComponent(companyName + ' share news')}&tbm=nws`;
@@ -72,12 +77,12 @@ async function getStockDetails(id: string) {
   return data.categoryResponseMap.TOP_GAINERS.items.find(stock => stock.gsin === id);
 }
 
-export default async function StockInfo({
-  params,
-}: {
-  params: { id: string }
-}) {
-  const stock = await getStockDetails(params.id);
+// Mark the component as a Server Component
+export const dynamic = 'force-dynamic';
+
+export default async function StockInfo(props: Props) {
+  const { id } = props.params;
+  const stock = await getStockDetails(id);
 
   if (!stock) {
     return <div className={styles.error}>Stock not found</div>;
