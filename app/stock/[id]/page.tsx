@@ -10,7 +10,24 @@ type Props = {
 
 async function getStockNews(companyName: string): Promise<NewsItem[]> {
   try {
-    const url = `https://www.google.com/search?q=${encodeURIComponent(companyName + ' share news')}&tbm=nws`;
+    // Get current date and 15 days ago date in YYYY-MM-DD format
+    const currentDate = new Date();
+    const fifteenDaysAgo = new Date(currentDate);
+    fifteenDaysAgo.setDate(currentDate.getDate() - 15);
+
+    const formatDate = (date: Date) => {
+      return date.toISOString().split('T')[0]; // Converts to YYYY-MM-DD format
+    };
+
+    // Construct the query parts separately
+    const baseQuery = `${companyName} share news`;
+    const dateFilter = `after:${formatDate(fifteenDaysAgo)} before:${formatDate(currentDate)}`;
+    
+    // Combine and encode the full query
+    const fullQuery = encodeURIComponent(`${baseQuery} ${dateFilter}`);
+    const url = `https://www.google.com/search?q=${fullQuery}&tbm=nws`;
+    
+    console.log(url);
     
     const response = await fetch(url, {
       headers: {
