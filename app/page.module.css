@@ -264,3 +264,17 @@ a.secondary {
   font-size: 0.8rem;
   margin-left: auto;
 }
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #d32f2f;
+  font-size: 1.2rem;
+}
