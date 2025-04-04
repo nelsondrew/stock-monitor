@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
@@ -17,9 +18,13 @@ export async function GET() {
     const [gainersResponse, volumeResponse] = await Promise.all([
       fetch('https://groww.in/v1/api/stocks_data/explore/v2/indices/GIDXNIFTY500/market_trends?discovery_filter_types=TOP_GAINERS&size=100', {
         headers: headers,
+        cache: 'no-store',
+        next: { revalidate: 0 }
       }),
       fetch('https://groww.in/v1/api/stocks_data/explore/v2/indices/GIDXNIFTY500/market_trends?discovery_filter_types=TRADED_BY_VOLUME&size=20', {
         headers: headers,
+        cache: 'no-store',
+        next: { revalidate: 0 }
       })
     ]);
 
@@ -32,9 +37,21 @@ export async function GET() {
       volumeResponse.json()
     ]);
 
-    return NextResponse.json({ gainersData, volumeData });
+    // Add cache control headers to prevent caching
+    return new NextResponse(JSON.stringify({ gainersData, volumeData }), {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error('API Error:', error);
-    return NextResponse.json({ error: 'Failed to fetch stocks' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch stocks' }, { 
+      status: 500,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      }
+    });
   }
 } 

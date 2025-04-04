@@ -28,7 +28,10 @@ export default function StockList() {
   useEffect(() => {
     async function fetchStocks() {
       try {
-        const response = await fetch('/api/stocks');
+        const response = await fetch('/api/stocks', {
+          cache: 'no-store',
+          next: { revalidate: 0 }
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch stocks');
         }
