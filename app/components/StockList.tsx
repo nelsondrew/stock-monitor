@@ -49,7 +49,7 @@ export default function StockList() {
         const filteredStocks = gainersData.categoryResponseMap.TOP_GAINERS.items
           .filter((stock: Stock) => {
             const gainPerc = stock.stats.dayChangePerc;
-            return gainPerc >= 1 && gainPerc <= 3;
+            return gainPerc >= 1 && gainPerc <= 4;
           })
           .sort((a: Stock, b: Stock) => {
             const aInVolume = volumeGsins.has(a.gsin);
